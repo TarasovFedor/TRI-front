@@ -1,0 +1,3 @@
+<template>
+    Сообщения
+</template>
