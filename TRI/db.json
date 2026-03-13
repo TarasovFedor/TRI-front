@@ -1,0 +1,43 @@
+{
+  "characters": [
+    {
+      "name": "Харри Магуайр",
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo1y6D0SXycGzllo7u_Nds-Ig51YzVmKRorQ&s",
+      "description": "Харри Магуайр – английский футболист, центральный защитник, известный своей физической мощью, силовой игрой и лидерскими качествами.",
+      "stats": {
+        "overall": 89,
+        "pace": 35,
+        "shots": 57,
+        "passing": 70,
+        "dribbling": 65,
+        "defending": 80,
+        "physical": 82
+      },
+      "authorId": 0,
+      "gameId": 0,
+      "id": "fkxrywm"
+    },
+    {
+      "id": "96cd",
+      "name": "fgdh",
+      "icon": "",
+      "description": "dfghdfgh",
+      "stats": {
+        "ghfgh": 1231
+      },
+      "authorId": 0,
+      "gameId": 0
+    },
+    {
+      "id": "7a09",
+      "name": "dfgdfg",
+      "icon": "",
+      "description": "sdfsfssssssssssssssss",
+      "stats": {
+        "sdf": 1213
+      },
+      "authorId": 0,
+      "gameId": 0
+    }
+  ]
+}
