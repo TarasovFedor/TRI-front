@@ -13,6 +13,8 @@ def get_the_next_day():
 class User(AbstractUser):
     about = models.TextField(blank=True, max_length=150, verbose_name="О пользователе")
     avatar = models.ImageField(blank=True, upload_to="avatars/", verbose_name="Аватар пользователя")
+    is_admin = models.BooleanField(default=False, verbose_name="Админ")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     
     class Meta:
         verbose_name = "Пользователь"
@@ -27,6 +29,7 @@ class Item(models.Model):
     name = models.CharField(max_length=50, verbose_name="Название")
     about = models.TextField(blank=True, verbose_name="О предмете")
     characteristics = models.TextField(blank=True, verbose_name="Характеристики")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     
     class Meta:
         verbose_name = "Предмет"
@@ -43,6 +46,7 @@ class Location(models.Model):
     rules = models.TextField(blank=True, verbose_name="Дополнительные правила")
     items = models.ManyToManyField(Item, related_name="locations", verbose_name="Предметы на локации")
     picture = models.ImageField(blank=True, upload_to="locations/", verbose_name="Изображение локации")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     
     class Meta:
         verbose_name = "Локация"
@@ -56,6 +60,7 @@ class Character(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="characters", verbose_name="Владелец персонажа")
     name = models.CharField(max_length=50, verbose_name="Имя")
     about = models.TextField(blank=True, verbose_name="О персонаже")
+    picture = models.ImageField(blank=True, upload_to="characters/", verbose_name="Изображение персонажа")
     items = models.ManyToManyField(Item, through="CharactersItem", related_name="characters", verbose_name="Предметы персонажа")
     status = models.CharField(max_length=50, verbose_name="Статус")
     characteristics = models.TextField(blank=True, verbose_name="Характеристики")
@@ -124,7 +129,7 @@ class GameParticipant(models.Model):
     
     game = models.ForeignKey(Game, on_delete=models.CASCADE, verbose_name="Игра")
     player = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Игрок")
-    roles = models.CharField(choices=ROLES_CHOICES, default="player", verbose_name="Роль в игре")
+    role = models.CharField(choices=ROLES_CHOICES, default="player", verbose_name="Роль в игре")
     joined_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата присоединения к игре")
     
     class Meta:
@@ -138,7 +143,7 @@ class GameParticipant(models.Model):
 class Post(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="posts", verbose_name="Игра")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts", verbose_name="Пользователь")
-    character = models.ForeignKey(Character, null=True, on_delete=models.SET_NULL, related_name="posts", verbose_name="Персонаж")
+    character = models.ForeignKey(Character, blank=True, null=True, on_delete=models.SET_NULL, related_name="posts", verbose_name="Персонаж")
     content = models.TextField(max_length=4000, verbose_name="Содержание")
     reply_to = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name="replies", verbose_name="Ответ на пост")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
@@ -149,7 +154,7 @@ class Post(models.Model):
         verbose_name_plural = "Посты"
     
     def get_short_content(self):
-        if self.content > 16:
+        if len(self.content) > 16:
             return self.content[:13] + "..."
         return self.content
     
@@ -160,7 +165,7 @@ class Post(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications", verbose_name="Пользователь")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="notifications", verbose_name="Пост")
-    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="notifications", verbose_name="Персонаж")
+    character = models.ForeignKey(Character, blank=True, null=True, on_delete=models.CASCADE, related_name="notifications", verbose_name="Персонаж")
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="notifications", verbose_name="Игра")
     title = models.TextField(max_length=50, verbose_name="Заголовок")
     content = models.TextField(max_length=4000, verbose_name="Содержание")
@@ -174,7 +179,7 @@ class Notification(models.Model):
         verbose_name_plural = "Уведомления"
     
     def get_short_content(self):
-        if self.content > 16:
+        if len(self.content) > 16:
             return self.content[:13] + "..."
         return self.content
     
