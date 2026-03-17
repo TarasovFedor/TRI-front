@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tri_app.models import User, Item, Location, Character, Game, CharactersItem, GameParticipant, Post, Notification
+from app.models import User, Item, Location, Character, Game, CharactersItem, GameParticipant, Post, Notification
 from django.utils.html import format_html
 from django.utils import timezone
 from django.contrib.admin import SimpleListFilter

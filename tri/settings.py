@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'tri_app',
+    'app',
+    'django_rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,7 +123,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "tri_app.User"
+AUTH_USER_MODEL = "app.User"
 
 MEDIA_URL = "/public/"
 MEDIA_ROOT = BASE_DIR / "public"

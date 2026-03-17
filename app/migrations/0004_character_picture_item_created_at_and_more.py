@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tri_app', '0003_user_is_admin_alter_notification_expires_at'),
+        ('app', '0003_user_is_admin_alter_notification_expires_at'),
     ]
 
     operations = [

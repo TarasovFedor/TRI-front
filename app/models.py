@@ -62,7 +62,7 @@ class Character(models.Model):
     about = models.TextField(blank=True, verbose_name="О персонаже")
     picture = models.ImageField(blank=True, upload_to="characters/", verbose_name="Изображение персонажа")
     items = models.ManyToManyField(Item, through="CharactersItem", related_name="characters", verbose_name="Предметы персонажа")
-    status = models.CharField(max_length=50, verbose_name="Статус")
+    status = models.CharField(blank=True, max_length=50, verbose_name="Статус")
     characteristics = models.TextField(blank=True, verbose_name="Характеристики")
     at_location = models.ForeignKey(Location, null=True, on_delete=models.CASCADE, related_name="characters", verbose_name="Персонаж в локации")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")

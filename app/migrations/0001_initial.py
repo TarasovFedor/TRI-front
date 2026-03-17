@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(choices=[('active', 'Активна'), ('paused', 'Приостановлена'), ('ended', 'Завершена'), ('abandoned', 'Брошена'), ('pending', 'Ожидает начала')], default='pending', verbose_name='Статус игры')),
                 ('invite_code', models.CharField(blank=True, max_length=20, verbose_name='Код для приглашения')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания игры')),
-                ('characters', models.ManyToManyField(related_name='games', to='tri_app.character', verbose_name='Персонажи в игре')),
+                ('characters', models.ManyToManyField(related_name='games', to='app.character', verbose_name='Персонажи в игре')),
             ],
             options={
                 'verbose_name': 'Игра',
@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('roles', models.CharField(choices=[('gm', 'Мастер'), ('moderator', 'Модератор'), ('player', 'Игрок'), ('spectator', 'Наблюдатель')], default='player', verbose_name='Роль в игре')),
                 ('joined_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата присоединения к игре')),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tri_app.game', verbose_name='Игра')),
+                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app.game', verbose_name='Игра')),
                 ('player', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Игрок')),
             ],
             options={
@@ -98,7 +98,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='players',
-            field=models.ManyToManyField(related_name='games', through='tri_app.GameParticipant', to=settings.AUTH_USER_MODEL, verbose_name='Игроки'),
+            field=models.ManyToManyField(related_name='games', through='app.GameParticipant', to=settings.AUTH_USER_MODEL, verbose_name='Игроки'),
         ),
         migrations.CreateModel(
             name='Item',
@@ -118,9 +118,9 @@ class Migration(migrations.Migration):
             name='CharactersItem',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='charcters_items', to='tri_app.character', verbose_name='Владелец предмета')),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='characters_items', to='tri_app.game', verbose_name='Предмет в игре')),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='characters_items', to='tri_app.item', verbose_name='Этот предмет')),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='charcters_items', to='app.character', verbose_name='Владелец предмета')),
+                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='characters_items', to='app.game', verbose_name='Предмет в игре')),
+                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='characters_items', to='app.item', verbose_name='Этот предмет')),
             ],
             options={
                 'verbose_name': 'Предмет персонажа',
@@ -130,7 +130,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='character',
             name='items',
-            field=models.ManyToManyField(related_name='characters', through='tri_app.CharactersItem', to='tri_app.item', verbose_name='Предметы персонажа'),
+            field=models.ManyToManyField(related_name='characters', through='app.CharactersItem', to='app.item', verbose_name='Предметы персонажа'),
         ),
         migrations.CreateModel(
             name='Location',
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
                 ('rules', models.TextField(blank=True, verbose_name='Дополнительные правила')),
                 ('picture', models.ImageField(blank=True, upload_to='locations/', verbose_name='Изображение локации')),
                 ('creator', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='locations', to=settings.AUTH_USER_MODEL, verbose_name='Создатель')),
-                ('items', models.ManyToManyField(related_name='locations', to='tri_app.item', verbose_name='Предметы на локации')),
+                ('items', models.ManyToManyField(related_name='locations', to='app.item', verbose_name='Предметы на локации')),
             ],
             options={
                 'verbose_name': 'Локация',
@@ -151,12 +151,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='locations',
-            field=models.ManyToManyField(related_name='games', to='tri_app.location', verbose_name='Локации в игре'),
+            field=models.ManyToManyField(related_name='games', to='app.location', verbose_name='Локации в игре'),
         ),
         migrations.AddField(
             model_name='character',
             name='at_location',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='characters', to='tri_app.location', verbose_name='Персонаж в локации'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='characters', to='app.location', verbose_name='Персонаж в локации'),
         ),
         migrations.CreateModel(
             name='Post',
@@ -165,9 +165,9 @@ class Migration(migrations.Migration):
                 ('content', models.TextField(max_length=4000, verbose_name='Содержание')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')),
-                ('character', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='posts', to='tri_app.character', verbose_name='Персонаж')),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='tri_app.game', verbose_name='Игра')),
-                ('reply_to', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='replies', to='tri_app.post', verbose_name='Ответ на пост')),
+                ('character', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='posts', to='app.character', verbose_name='Персонаж')),
+                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='app.game', verbose_name='Игра')),
+                ('reply_to', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='replies', to='app.post', verbose_name='Ответ на пост')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
             ],
             options={
@@ -185,10 +185,10 @@ class Migration(migrations.Migration):
                 ('is_read', models.BooleanField(default=False, verbose_name='Прочитано')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата получения')),
                 ('expires_at', models.DateTimeField(default=datetime.datetime(2026, 3, 6, 17, 5, 10, 885079, tzinfo=datetime.timezone.utc), verbose_name='Дата истечения')),
-                ('character', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='tri_app.character', verbose_name='Персонаж')),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='tri_app.game', verbose_name='Игра')),
+                ('character', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='app.character', verbose_name='Персонаж')),
+                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='app.game', verbose_name='Игра')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='tri_app.post', verbose_name='Пост')),
+                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to='app.post', verbose_name='Пост')),
             ],
             options={
                 'verbose_name': 'Уведомление',

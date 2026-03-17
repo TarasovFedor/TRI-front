@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tri_app', '0002_rename_roles_gameparticipant_role_and_more'),
+        ('app', '0002_rename_roles_gameparticipant_role_and_more'),
     ]
 
     operations = [
