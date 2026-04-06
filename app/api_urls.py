@@ -2,6 +2,8 @@ from django.urls import path, include
 from .api_views import UserListAPIView, UserDetailAPIView, ItemListAPIView, ItemDetailAPIView, LocationListAPIView, LocationDetailAPIView, CharacterListAPIView, CharacterDetailAPIView, GameListAPIView, GameDetailAPIView, GameParticipantListAPIView, GameParticipantDetailAPIView, PostListAPIView, PostDetailAPIView, NotificationListAPIView, NotificationDetailAPIView
 from rest_framework.routers import DefaultRouter
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 
 # router = DefaultRouter()
 # router.register("questions", QuestionViewSet, basename="api-questions")
@@ -24,5 +26,9 @@ urlpatterns = [
     path("notifications/", NotificationListAPIView.as_view(), name="api_notification_list"),
     path("notifications/<int:pk>/", NotificationDetailAPIView.as_view(), name="api_notification_detail"),
 
+
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # path("", include(router.urls)),
 ]

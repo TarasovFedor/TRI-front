@@ -57,7 +57,7 @@ class GameDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GameParticipantListAPIView(generics.ListCreateAPIView):
-    queryset = GameParticipant.objects.all().order_by("-created_at")
+    queryset = GameParticipant.objects.all().order_by("-joined_at")
     serializer_class = GameParticipantSerializer
 
 class GameParticipantDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
